@@ -6,7 +6,6 @@ extern double array[N][N];
  */
 void par_omp_gauss_seidel()
 {
-  // ITERS * 2 because it is red + black.
   int i, j, d;
   int iter;
   int ifirst, ilast;
