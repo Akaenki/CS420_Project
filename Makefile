@@ -3,7 +3,7 @@ SHELL=/bin/bash
 CC=icc
 
 # The array size.
-N=100
+N= 5000
 
 # How many iterations to run
 ITERS=100
@@ -16,12 +16,6 @@ RIGHT_BOUNDARY_VALUE=9.2
 
 # Number of threads.
 NUM_THREADS_TAUB=12
-
-# Tile sizes for sequential code.
-COL_BLOCK_SIZE_TAUB=20
-
-# Tile sizes for parallel code.
-COL_BLOCK_SIZE_TAUB_PAR=20
 
 # Compiler optimization level.
 OPT_LEVEL=-O0 #-qopt-report
@@ -56,8 +50,6 @@ COMMON_PROG_ARGS=-DN=$(N) \
 # Program arguments for Taub.
 TAUB_PROG_ARGS=$(COMMON_PROG_ARGS) \
   			     	 -DNUM_THREADS=$(NUM_THREADS_TAUB) \
-  			     	 -DCOL_BLOCK_SIZE=$(COL_BLOCK_SIZE_TAUB) \
-  			     	 -DCOL_BLOCK_SIZE_PAR=$(COL_BLOCK_SIZE_TAUB_PAR)
 
 # Compilation command for Taub, no PAPI.
 TAUB_NOPAPI_CC=$(CC) -DNOPAPI $(TAUB_PROG_ARGS)
