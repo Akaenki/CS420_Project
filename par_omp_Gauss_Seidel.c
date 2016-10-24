@@ -22,6 +22,7 @@ void par_omp_gauss_seidel()
     for(d=0;d<N+N-5;d++){
       ifirst=(d<N-2)?d+1:N-2;
       ilast=(d<N-2)?1:d-N+4;
+#pragma omp parallel for
       for (i = ifirst; i >= ilast; i--)
       {
           int j=d+2-i;
