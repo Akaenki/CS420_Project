@@ -1,24 +1,76 @@
 SHELL=/bin/bash
 
 CC=icc
-MPI_CC=mpicc
 
-# Flags
-OPT_FLAG=-O3
-OMP_FLAG=-qopenmp
+# The array size.
+N=100
 
-# User defined values
+# How many iterations to run
+ITERS=100
+
+# Boundary values.
+TOP_BOUNDARY_VALUE=5.8
+BOTTOM_BOUNDARY_VALUE=10.2
+LEFT_BOUNDARY_VALUE=4.3
+RIGHT_BOUNDARY_VALUE=9.2
+
+# Number of threads.
+NUM_THREADS_TAUB=12
+
+# Tile sizes for sequential code.
+COL_BLOCK_SIZE_TAUB=20
+
+# Tile sizes for parallel code.
+COL_BLOCK_SIZE_TAUB_PAR=20
+
+# Compiler optimization level.
+OPT_LEVEL=-O0 #-qopt-report
 
 
+##########################################
+# DO NOT MODIFY ANYTHING BELOW THIS LINE #
+# DO NOT MODIFY ANYTHING BELOW THIS LINE #
+# DO NOT MODIFY ANYTHING BELOW THIS LINE #
+# DO NOT MODIFY ANYTHING BELOW THIS LINE #
+##########################################
 
-TARGET = a.out
+# Used for checking the results.
+ERROR_THRESHOLD=1e-4
 
-all : ${TARGET}
+# The papi library location.
+PAPI_LIB_DIR=/usr/local/apps/papi/5.4.1/lib
+PAPI_INC_DIR=/usr/local/apps/papi/5.4.1/include
 
-a.out: *.c
-	${MPI_CC} ${OPT_FLAG} ${OMP_FLAG} -o ${TARGET}
+# Common program arguments.
+COMMON_PROG_ARGS=-DN=$(N) \
+			 		  		 -DITERS=$(ITERS) \
+			        	 -DTOP_BOUNDARY_VALUE=$(TOP_BOUNDARY_VALUE) \
+			        	 -DBOTTOM_BOUNDARY_VALUE=$(BOTTOM_BOUNDARY_VALUE) \
+			        	 -DLEFT_BOUNDARY_VALUE=$(LEFT_BOUNDARY_VALUE) \
+			        	 -DRIGHT_BOUNDARY_VALUE=$(RIGHT_BOUNDARY_VALUE) \
+			        	 -DERROR_THRESHOLD=$(ERROR_THRESHOLD) \
+								 -std=c99 \
+								 -qopenmp \
+								 $(OPT_LEVEL)
 
+# Program arguments for Taub.
+TAUB_PROG_ARGS=$(COMMON_PROG_ARGS) \
+  			     	 -DNUM_THREADS=$(NUM_THREADS_TAUB) \
+  			     	 -DCOL_BLOCK_SIZE=$(COL_BLOCK_SIZE_TAUB) \
+  			     	 -DCOL_BLOCK_SIZE_PAR=$(COL_BLOCK_SIZE_TAUB_PAR)
+
+# Compilation command for Taub, no PAPI.
+TAUB_NOPAPI_CC=$(CC) -DNOPAPI $(TAUB_PROG_ARGS)
+
+TAUB_PAPI_CC=$(CC) -I${PAPI_INC_DIR} -L$(PAPI_LIB_DIR) -lpapi $(TAUB_PROG_ARGS)
+
+all: taub_no_papi taub_with_papi
+
+taub_no_papi: *.c
+	$(TAUB_NOPAPI_CC) *.c -o taub_no_papi
+
+taub_with_papi: *.c
+	$(TAUB_PAPI_CC) *.c -o taub_with_papi
 
 clean:
-	rm -f *.out *.o ${TARGET}
-
+	rm -f *.out *.o *.optrpt taub_no_papi taub_with_papi
