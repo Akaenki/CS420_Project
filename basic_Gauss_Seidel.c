@@ -20,8 +20,8 @@ void basic_gauss_seidel()
   for (iter = 0; iter < ITERS ; iter++)
   {
     for(d=0;d<N+N-5;d++){
-      ifirst=(d<N-1)?d+1:N-2;
-      ilast=(d<N-1)?1:d-N+3;
+      ifirst=(d<N-2)?d+1:N-2;
+      ilast=(d<N-2)?1:d-N+4;
       for (i = ifirst; i >= ilast; i--)
       {
           j=d+2-i;
