@@ -23,7 +23,7 @@ void basic_gauss_seidel()
     for(d=0;d<N+N-5;d++){
       ifirst=(d<N-1)?d+1:N-2;
       ilast=(d<N-1)?1:d-N+3;
-      for (i = ifirst; i < ilast; i++)
+      for (i = ifirst; i < ilast; i--)
       {
           j=d+2-i;
           array[i][j]=0.25*(array[i-1][j]+array[i+1][j]+array[i][j-1]+array[i][j+1]);
