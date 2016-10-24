@@ -12,6 +12,7 @@ double correct_results[N][N];
 
 void basic_gauss_seidel();
 void par_omp_gauss_seidel();
+void par_omp_gauss_seidel3();
 // Initialize array to zeros.
 void reset_array()
 {
@@ -67,14 +68,15 @@ int main (int argc, char** argv)
 
   // Run cache-aware sequential code.
   reset_array();
-  #pragma omp parallel
+  #pragma omp paralle
   {
+    omp_set_num_threads(NUM_THREADS);
     if (omp_get_thread_num() == 0)
       printf("Running cache-aware parallel version with %d threads.\n", omp_get_num_threads());
   }
   papi_start();
   {
-    par_omp_gauss_seidel();
+    par_omp_gauss_seidel3();
   }
   papi_stop_and_report();
 
