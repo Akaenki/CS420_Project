@@ -3,10 +3,12 @@ SHELL=/bin/bash
 CC=icc
 
 # The array size.
-N= 5000
+N= 2000
 
+# The length where to use the openmpi
+BEGIN_LENGTH_OMP= 1000
 # How many iterations to run
-ITERS=100
+ITERS=10
 
 # Boundary values.
 TOP_BOUNDARY_VALUE=5.8
@@ -29,7 +31,7 @@ OPT_LEVEL=-O0 #-qopt-report
 ##########################################
 
 # Used for checking the results.
-ERROR_THRESHOLD=1e-4
+ERROR_THRESHOLD=1e-3
 
 # The papi library location.
 PAPI_LIB_DIR=/usr/local/apps/papi/5.4.1/lib
@@ -50,6 +52,7 @@ COMMON_PROG_ARGS=-DN=$(N) \
 # Program arguments for Taub.
 TAUB_PROG_ARGS=$(COMMON_PROG_ARGS) \
   			     	 -DNUM_THREADS=$(NUM_THREADS_TAUB) \
+  			     	 -DBEGIN_LENGTH=$(BEGIN_LENGTH_OMP) \
 
 # Compilation command for Taub, no PAPI.
 TAUB_NOPAPI_CC=$(CC) -DNOPAPI $(TAUB_PROG_ARGS)
