@@ -5,7 +5,7 @@ extern double array[N][N];
  * Implements the basic sequential Red-Black Jacobi Relaxation.
  * Use this as a stub for your other implementations.
  */
-void par_omp_gauss_seidel3()
+void par_omp_gauss_seidel()
 {
   int i, j, d;
   int iter;
