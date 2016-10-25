@@ -1,0 +1,5 @@
+Running basic sequential version to save the results.
+Execution time: 0.2486191
+Running cache-aware parallel version with 12 threads.
+Execution time: 0.1274471
+GOOD -- Test passed.
