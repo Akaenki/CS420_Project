@@ -68,7 +68,7 @@ int main (int argc, char** argv)
 
   // Run cache-aware sequential code.
   reset_array();
-  #pragma omp paralleL
+  #pragma omp parallel
   {
     omp_set_num_threads(NUM_THREADS);
     if (omp_get_thread_num() == 0)
