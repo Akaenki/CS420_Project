@@ -6,7 +6,6 @@
 #PBS -j oe
 
 cd $PBS_O_WORKDIR
-make clean
 make
 file1=nopapi
 file2=papi
