@@ -6,9 +6,9 @@ The goal of this project is to develop an algorithm to parallel the [Gauss-Seide
 The performance is tested by runinng the iterative method for a fixed number of iterations and collect the average execution time. 
 
 TODO: 
-1. Change the size of the matrxi from N*N to M*N
+1. Change the size of the matri from NN to MxN
 2. May need a load balancing function?
 
 
 #Changes
-* Item The boundary values are no longer in the allocated matrix (treat the boundary values as environmental variables)
+* The boundary values are no longer in the allocated matrix (treat the boundary values as environmental variables)
