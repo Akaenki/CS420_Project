@@ -13,7 +13,7 @@ void par_omp_gauss_seidel(){
             int ilast  = (d < N) ? 0 : d-N+1;
             
             if((ifirst-ilast) >= BEGIN_LENGTH){ //parallel
-#pragma omp parallel for schedule(dynamic)
+#pragma omp parallel for schedule(static)
                 for(int i = ifirst; i >= ilast; i--){ //from left to right
                     int j = d - i;
                     
