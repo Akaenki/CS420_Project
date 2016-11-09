@@ -81,4 +81,12 @@ int main (int argc, char** argv)
 
   unit_test();
 
+  matrix_t* matrix = generate_matrix(N);
+  papi_start();
+  {
+    par_mpi_gauss_seidel(matrix);
+  }
+  papi_stop_and_report();
+
+  unit_test();
 }
