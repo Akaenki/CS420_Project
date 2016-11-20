@@ -72,9 +72,8 @@ void par_mpi_gauss_seidel(int argc, char** argv)
   int i, j, d;
   int iter;
   int ifirst, ilast;
-  double transfer_time = 0;
   double total_time= MPI_Wtime();
-  double inner_time;
+  double inner_time=0;
   matrix_t* matrix = generate_matrix(N);
 
   //initialize the boundary value
@@ -92,7 +91,6 @@ void par_mpi_gauss_seidel(int argc, char** argv)
     for(d=0;d<N+N-5;d++){
       ifirst = matrix->Ifirst[d];
       ilast = matrix->Ilast[d];
-      transfer_time += inner_time;
       calculate(matrix, ifirst, ilast,d);
       inner_time+=transfer_d_row(matrix, d);//update the whole matrix once the element has changed
       MPI_Barrier(MPI_COMM_WORLD);//as it should be sequantial in the d index for both MPI and openmp
