@@ -3,12 +3,12 @@
 #define max(a,b) ((a)>(b) ? a:b)
 
 typedef struct{
-  size_t* Ifirst;//array of the ifirst, which have 2n-5 element
-  size_t* Ilast;//array of the ilast, which have 2n-5 element
-  size_t n;//total size of the array
-  size_t process;
+  int* Ifirst;//array of the ifirst, which have 2n-5 element
+  int* Ilast;//array of the ilast, which have 2n-5 element
+  int n;//total size of the array
+  int process;
 } matrix_t;
 
-matrix_t* generate_matrix(size_t n);
+matrix_t* generate_matrix(int n);
 
 void destroy_matrix(matrix_t* matrix);

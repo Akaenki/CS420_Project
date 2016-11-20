@@ -26,11 +26,9 @@ void unit_test()
   {
     for (int j = 0; j < N; j++)
     {
-      if (abs(correct_results[i][j] - array[i][j]) > ERROR_THRESHOLD)
+      if (fabs(correct_results[i][j] - array[i][j]) > ERROR_THRESHOLD)
       {
-        //printf("Incorrect result.\n");
         printf("Incorrect result.\n");
-        printf("i:%d j:%d\n",i,j);
         return;
       }
     }
@@ -63,15 +61,16 @@ int main (int argc, char** argv)
     if (omp_get_thread_num() == 0)
       printf("Running openmp only with %d threads.\n", omp_get_num_threads());
   }
-    par_omp_gauss_seidel();
+
+  par_omp_gauss_seidel();
   unit_test();
 
 
+  reset_array();
   MPI_Barrier(MPI_COMM_WORLD);//as it should be sequantial in the d index for both MPI and openmp
   printf("Running openmp with mpi\n");
   par_mpi_gauss_seidel();
 
-  if(rank==0)
   unit_test();
   MPI_Finalize();
 }

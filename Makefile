@@ -1,15 +1,14 @@
 SHELL=/bin/bash
 
-CC=mpiicc
+MPI_CC=mpiicc
 
 # The array size.
-#N= 5 
-N= 26
+N= 50 #need revise to meet the requirement
 
 # The length where to use the openmpi
-BEGIN_LENGTH_OMP= 1000
+BEGIN_LENGTH_OMP= 1000 #need revise to meet the requirement
 # How many iterations to run
-ITERS=20
+ITERS=20 #need revise to meet the requirement
 
 # Boundary values.
 TOP_BOUNDARY_VALUE=5.8
@@ -18,10 +17,11 @@ LEFT_BOUNDARY_VALUE=4.3
 RIGHT_BOUNDARY_VALUE=9.2
 
 # Number of threads.
-NUM_THREADS_TAUB=12
+NUM_THREADS_TAUB=12 #need revise to meet the requirement
 
 # Compiler optimization level.
-OPT_LEVEL=-O0 #-qopt-report
+OPT_LEVEL=-O0 #-qopt-reportP#need revise to meet the requirement
+
 
 
 ##########################################
@@ -47,7 +47,8 @@ COMMON_PROG_ARGS=-DN=$(N) \
 			        	 -DRIGHT_BOUNDARY_VALUE=$(RIGHT_BOUNDARY_VALUE) \
 			        	 -DERROR_THRESHOLD=$(ERROR_THRESHOLD) \
 								 -std=c99 \
-								 -qopenmp
+								 -qopenmp#need revise to meet the requirement
+
 
 # Program arguments for Taub.
 TAUB_PROG_ARGS=$(COMMON_PROG_ARGS) \
@@ -55,12 +56,12 @@ TAUB_PROG_ARGS=$(COMMON_PROG_ARGS) \
   			     	 -DBEGIN_LENGTH=$(BEGIN_LENGTH_OMP) \
 
 # Compilation command for Taub, no PAPI.
-TAUB_NOPAPI_CC=$(CC) -DNOPAPI $(TAUB_PROG_ARGS)
+TAUB_MPICC=$(MPI_CC) $(TAUB_PROG_ARGS)
 
-all: taub_no_papi
+all: taub_hybrid
 
-taub_no_papi: *.c
-	$(TAUB_NOPAPI_CC) *.c -o taub_no_papi
+taub_hybrid: *.c
+	$(TAUB_MPICC) *.c -o taub_hybrid
 
 clean:
-	rm -f taub_no_papi
+	rm -f taub*
