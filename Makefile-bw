@@ -44,7 +44,7 @@ COMMON_PROG_ARGS=-DN=$(N) \
 			        	 -DLEFT_BOUNDARY_VALUE=$(LEFT_BOUNDARY_VALUE) \
 			        	 -DRIGHT_BOUNDARY_VALUE=$(RIGHT_BOUNDARY_VALUE) \
 			        	 -DERROR_THRESHOLD=$(ERROR_THRESHOLD) \
-								 -h mpi4#need revise to meet the requirement
+								 -h mpi2 #need revise to meet the requirement
 
 
 # Program arguments for Taub.
