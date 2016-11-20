@@ -28,7 +28,9 @@ void unit_test()
     {
       if (abs(correct_results[i][j] - array[i][j]) > ERROR_THRESHOLD)
       {
+        //printf("Incorrect result.\n");
         printf("Incorrect result.\n");
+        printf("i:%d j:%d\n",i,j);
         return;
       }
     }
@@ -39,11 +41,10 @@ void unit_test()
 int main (int argc, char** argv)
 {
 
+  MPI_Init(&argc, &argv);
 
-//  if (provided != MPI_THREAD_FUNNELED) {
-//        printf("Error: Requested thread support '%d', but only received '%d'\n", required, provided);
-//            return 1;
-//  }
+  int size, rank;
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   reset_array();
 
   printf("Running basic sequential version to save the results.\n");
@@ -60,16 +61,17 @@ int main (int argc, char** argv)
   {
     omp_set_num_threads(NUM_THREADS);
     if (omp_get_thread_num() == 0)
-      printf("Running cache-aware parallel version with %d threads.\n", omp_get_num_threads());
+      printf("Running openmp only with %d threads.\n", omp_get_num_threads());
   }
-
-
-
     par_omp_gauss_seidel();
-
   unit_test();
 
-    par_mpi_gauss_seidel();
 
+  MPI_Barrier(MPI_COMM_WORLD);//as it should be sequantial in the d index for both MPI and openmp
+  printf("Running openmp with mpi\n");
+  par_mpi_gauss_seidel();
+
+  if(rank==0)
   unit_test();
+  MPI_Finalize();
 }
