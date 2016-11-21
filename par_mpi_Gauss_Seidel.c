@@ -39,8 +39,8 @@ double transfer_d_row(matrix_t* matrix, int d){
   
    if(rank ==0 ){
      for( k=1; k<size;k++){
-       MPI_Recv(&(ifirst),1,MPI_UINT64_T, k,0,MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-       MPI_Recv(&(ilast),1,MPI_UINT64_T, k,0,MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+       MPI_Recv(&(ifirst),1,MPI_INT, k,0,MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+       MPI_Recv(&(ilast),1,MPI_INT, k,0,MPI_COMM_WORLD, MPI_STATUS_IGNORE);
        for(i=ifirst;i>=ilast;i--) {
        j=d+2-i;
        MPI_Recv(&(array[i][j]),1,MPI_DOUBLE, k , 0,MPI_COMM_WORLD, MPI_STATUS_IGNORE);
@@ -50,8 +50,8 @@ double transfer_d_row(matrix_t* matrix, int d){
    else{
      ifirst= matrix->Ifirst[d];
      ilast= matrix->Ilast[d];
-     MPI_Send(&(ifirst),1,MPI_UINT64_T, 0,0,MPI_COMM_WORLD);
-     MPI_Send(&(ilast),1,MPI_UINT64_T, 0,0,MPI_COMM_WORLD);
+     MPI_Send(&(ifirst),1,MPI_INT, 0,0,MPI_COMM_WORLD);
+     MPI_Send(&(ilast),1,MPI_INT, 0,0,MPI_COMM_WORLD);
      for(i=ifirst;i>=ilast;i--) {
      j=d+2-i;
      MPI_Send(&(array[i][j]),1,MPI_DOUBLE, 0 ,0, MPI_COMM_WORLD);
