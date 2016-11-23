@@ -9,4 +9,4 @@ cd $PBS_O_WORKDIR
 
 NUM_RANKS=2
 
-mpirun -np ${NUM_RANKS} -ppn 1 ./taub_hybrid small_result
+mpirun -np ${NUM_RANKS} -ppn 1 ./taub_hybrid>result

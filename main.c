@@ -7,6 +7,8 @@
 #include "par_Gauss_Seidel.h"
 #include "matrix.h"
 
+#define CACHE_SIZE 12582912
+
 double array[N][N];
 
 // Used for testing.
@@ -36,6 +38,23 @@ void unit_test()
   printf("GOOD -- Test passed.\n");
 }
 
+void clear_cache() {
+  size_t array_size = CACHE_SIZE * 2.5;
+  double temp = 0.0;
+  double* dummy = (double*)malloc(sizeof(double) * array_size);
+
+  for (size_t i = 0; i < array_size; ++i) {
+    dummy[i] = i / array_size;
+  }
+
+  for (size_t j = 0; j < 10; ++j) {
+    for (size_t i = 0; i < array_size; ++i) {
+      temp += dummy[i] / j;
+    }
+  }
+
+  fprintf(stderr, "Cleared cache (ignore this value: %f)\n", temp);
+}	
 int main (int argc, char** argv)
 {
 
@@ -64,7 +83,7 @@ int main (int argc, char** argv)
     if (omp_get_thread_num() == 0)
       printf("Running openmp only with %d threads.\n", omp_get_num_threads());
   }
-
+  clear_cache();
   exe_time = MPI_Wtime();
   par_omp_gauss_seidel();
   exe_time = MPI_Wtime()-exe_time;
@@ -73,6 +92,7 @@ int main (int argc, char** argv)
 
 
   reset_array();
+  clear_cache();
   MPI_Barrier(MPI_COMM_WORLD);//as it should be sequantial in the d index for both MPI and openmp
   printf("Running openmp with mpi\n");
   par_mpi_gauss_seidel();

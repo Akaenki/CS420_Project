@@ -26,7 +26,7 @@ matrix_t* generate_matrix(int n){
       ifirst=(d<n-2)?d+1:n-2;
       ilast=(d<n-2)?1:d-n+4;
       i_interval=((ifirst-ilast+1)%size==0)?(int)((ifirst-ilast+1)/size):(int)floor((ifirst-ilast+1)/size)+1;
-      if (ifirst-ilast+1>=size)//decide whether to transfer
+      if (ifirst-ilast+1>=size*LENGTH_MPI)//decide whether to transfer
       {
       matrix->Ifirst[d]=(int)max((int)ilast,(int)(ifirst-rank*i_interval));
       matrix->Ilast[d]=(int)max((int)ilast,(int)(ifirst-(rank+1)*i_interval+1));

@@ -3,10 +3,11 @@ SHELL=/bin/bash
 MPI_CC=mpiicc
 
 # The array size.
-N= 50 #need revise to meet the requirement
+N= 5000 #need revise to meet the requirement
 
 # The length where to use the openmpi
 BEGIN_LENGTH_OMP= 1000 #need revise to meet the requirement
+BEGIN_LENGTH_MPI= 100 #need revise to meet the requirement
 # How many iterations to run
 ITERS=20 #need revise to meet the requirement
 
@@ -17,7 +18,7 @@ LEFT_BOUNDARY_VALUE=4.3
 RIGHT_BOUNDARY_VALUE=9.2
 
 # Number of threads.
-NUM_THREADS_TAUB=12 #need revise to meet the requirement
+NUM_THREADS_TAUB=1 #need revise to meet the requirement
 
 # Compiler optimization level.
 OPT_LEVEL=-O0 #-qopt-reportP#need revise to meet the requirement
@@ -35,8 +36,6 @@ OPT_LEVEL=-O0 #-qopt-reportP#need revise to meet the requirement
 ERROR_THRESHOLD=1e-3
 
 # The papi library location.
-PAPI_LIB_DIR=/opt/cray/papi/5.4.3.1/lib
-PAPI_INC_DIR=/opt/cray/papi/5.4.3.1/include
 
 # Common program arguments.
 COMMON_PROG_ARGS=-DN=$(N) \
@@ -53,7 +52,8 @@ COMMON_PROG_ARGS=-DN=$(N) \
 # Program arguments for Taub.
 TAUB_PROG_ARGS=$(COMMON_PROG_ARGS) \
   			     	 -DNUM_THREADS=$(NUM_THREADS_TAUB) \
-  			     	 -DBEGIN_LENGTH=$(BEGIN_LENGTH_OMP) \
+  			     	 -DLENGTH_OMP=$(BEGIN_LENGTH_OMP) \
+				 -DLENGTH_MPI=$(BEGIN_LENGTH_MPI) \
 
 # Compilation command for Taub, no PAPI.
 TAUB_MPICC=$(MPI_CC) $(TAUB_PROG_ARGS)

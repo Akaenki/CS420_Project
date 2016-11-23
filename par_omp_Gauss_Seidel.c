@@ -23,7 +23,7 @@ void par_omp_gauss_seidel()
     for(d=0;d<N+N-5;d++){
       ifirst=(d<N-2)?d+1:N-2;
       ilast=(d<N-2)?1:d-N+4;
-      if (ifirst-ilast>BEGIN_LENGTH){//decide whether or not use openmpi
+      if (ifirst-ilast>LENGTH_OMP){//decide whether or not use openmpi
       #pragma omp parallel for
       for (i = ifirst; i >= ilast; i--)
       {
