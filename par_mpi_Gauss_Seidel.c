@@ -45,8 +45,8 @@ double transfer_d_row(matrix_t* matrix, int d){
   
    if(rank ==0 ){
      for( k=1; k<size;k++){
-       MPI_Recv(&(ifirst),1,MPI_UINT64_T, k,0,MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-       MPI_Recv(&(ilast),1,MPI_UINT64_T, k,0,MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+       MPI_Recv(&(ifirst),1,MPI_INT, k,0,MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+       MPI_Recv(&(ilast),1,MPI_INT, k,0,MPI_COMM_WORLD, MPI_STATUS_IGNORE);
        for(i=ifirst;i>=ilast;i--) {
        j=d+2-i;
        MPI_Recv(&(array[i][j]),1,MPI_DOUBLE, k , 0,MPI_COMM_WORLD, MPI_STATUS_IGNORE);
@@ -56,8 +56,8 @@ double transfer_d_row(matrix_t* matrix, int d){
    else{
      ifirst= matrix->Ifirst[d];
      ilast= matrix->Ilast[d];
-     MPI_Send(&(ifirst),1,MPI_UINT64_T, 0,0,MPI_COMM_WORLD);
-     MPI_Send(&(ilast),1,MPI_UINT64_T, 0,0,MPI_COMM_WORLD);
+     MPI_Send(&(ifirst),1,MPI_INT, 0,0,MPI_COMM_WORLD);
+     MPI_Send(&(ilast),1,MPI_INT, 0,0,MPI_COMM_WORLD);
      for(i=ifirst;i>=ilast;i--) {
      j=d+2-i;
      MPI_Send(&(array[i][j]),1,MPI_DOUBLE, 0 ,0, MPI_COMM_WORLD);
@@ -79,9 +79,8 @@ void par_mpi_gauss_seidel(int argc, char** argv)
   int i, j, d;
   int iter;
   int ifirst, ilast;
-  double transfer_time = 0;
   double total_time= MPI_Wtime();
-  double inner_time;
+  double inner_time=0;
   matrix_t* matrix = generate_matrix(N);
 
   //initialize the boundary value
@@ -99,7 +98,6 @@ void par_mpi_gauss_seidel(int argc, char** argv)
     for(d=0;d<N+N-5;d++){
       ifirst = matrix->Ifirst[d];
       ilast = matrix->Ilast[d];
-      transfer_time += inner_time;
       calculate(matrix, ifirst, ilast,d);
       inner_time+=transfer_d_row(matrix, d);//update the whole matrix once the element has changed
       MPI_Barrier(MPI_COMM_WORLD);//as it should be sequantial in the d index for both MPI and openmp
