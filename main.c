@@ -48,9 +48,12 @@ int main (int argc, char** argv)
   printf("Running basic sequential version to save the results.\n");
 
 
+  double exe_time = MPI_Wtime();
   {
     basic_gauss_seidel();
   }
+  exe_time = MPI_Wtime()-exe_time;
+  printf("execution time for basic version:%f\n", exe_time);
 
   memcpy(correct_results, array, sizeof(array));
 
@@ -62,7 +65,10 @@ int main (int argc, char** argv)
       printf("Running openmp only with %d threads.\n", omp_get_num_threads());
   }
 
+  exe_time = MPI_Wtime();
   par_omp_gauss_seidel();
+  exe_time = MPI_Wtime()-exe_time;
+  printf("execution time for openmp only version:%f\n", exe_time);
   unit_test();
 
 
