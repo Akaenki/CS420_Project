@@ -36,6 +36,12 @@ double transfer_d_row(matrix_t* matrix, int d){
   int i, j;
   int k;
   int ifirst, ilast;
+  //get the datatype
+  MPI_Datatype New_Type;
+  int IFIRST=(d<N-2)?d+1:N-2;//THE i index for the entire matrix
+  int ILAST=(d<N-2)?1:d-N+4;
+  MPI_Type_vector(IFIRST-ILAST+1, 1, N-1, MPI_DOUBLE, &New_Type);
+  MPI_Type_commit(&New_Type);
   
    if(rank ==0 ){
      for( k=1; k<size;k++){
@@ -57,7 +63,8 @@ double transfer_d_row(matrix_t* matrix, int d){
      MPI_Send(&(array[i][j]),1,MPI_DOUBLE, 0 ,0, MPI_COMM_WORLD);
      }
    }
-  MPI_Bcast(&array, N*N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+  //MPI_Bcast(&array, N*N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+  MPI_Bcast(&array[ILAST][d+2-ILAST],1 , New_Type, 0, MPI_COMM_WORLD);
   MPI_Barrier(MPI_COMM_WORLD);
   exe_time = MPI_Wtime()-exe_time;
   return exe_time;
@@ -103,5 +110,5 @@ void par_mpi_gauss_seidel(int argc, char** argv)
 
   total_time = MPI_Wtime()-total_time;
   destroy_matrix(matrix);
-  printf("total execution time:%f\ntime for transfer in the loop: %f\n", total_time,inner_time);
+  printf("execution time for hybrid:%f\ntime for transfer in the loop: %f\n", total_time,inner_time);
 }
